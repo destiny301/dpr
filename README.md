@@ -3,7 +3,7 @@
 ![image](https://github.com/destiny301/dpr/blob/main/flowchart.png)
 
 # Updates
-<img src="https://github.com/destiny301/dpr/blob/main/ps_module.png" width="100">
+<img src="https://github.com/destiny301/dpr/blob/main/ps_module.png" width="400">
 <!-- ![image](https://github.com/destiny301/dpr/blob/main/ps_module.png | width=100) -->
 Patch-Selector module code is releaseed.
 
