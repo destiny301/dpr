@@ -3,7 +3,8 @@
 ![image](https://github.com/destiny301/dpr/blob/main/flowchart.png)
 
 # Updates
-![image](https://github.com/destiny301/dpr/blob/main/ps_module.png | width=100)
+<img src="https://github.com/destiny301/dpr/blob/main/ps_module.png" width="100">
+<!-- ![image](https://github.com/destiny301/dpr/blob/main/ps_module.png | width=100) -->
 Patch-Selector module code is releaseed.
 
 For Patch-Refinement module, please refer to [SR3](https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement).
