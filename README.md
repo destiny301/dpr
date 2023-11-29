@@ -11,7 +11,7 @@ Early object detection (OD) is a crucial task for the safety of many dynamic sys
 <!-- ![image](https://github.com/destiny301/dpr/blob/main/ps_module.png | width=100) -->
 Patch-Selector module code is releaseed.
 
-For Patch-Refinement module, please refer to [SR3](https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement).
+For Patch-Refiner module, please refer to [SR3](https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement).
 
 ## Data
 Prepare the data as the following structure:
