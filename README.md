@@ -1,4 +1,4 @@
-# Patch-based Selection and Refinement for Early Object Detection
+# Patch-based Selection and Refinement for Early Object Detection [WACV2024](https://arxiv.org/abs/2311.02274)
 
 ![image](https://github.com/destiny301/dpr/blob/main/flowchart.png)
 
