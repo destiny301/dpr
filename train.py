@@ -91,10 +91,10 @@ def main(args):
                 p32te = nn.MaxPool2d(kernel_size=4, stride=4)(p32te)
                 pte = torch.maximum(pte, p64te)
                 pte = torch.maximum(pte, p32te)
-
+                
                 lte = criterion(pte, torch.squeeze(ate, dim=1).long() if args.loss == 'ce' else ate)
                 test_loss += lte.item()
-
+                pte = nn.Sigmoid()(pte)
                 if args.loss != 'bce':
                     pte = torch.unsqueeze(torch.argmax(pte, 1), 1)
                 pte = pte.cpu().numpy()
@@ -103,6 +103,7 @@ def main(args):
                 ate[ate>=0.5] = 1
                 ate[ate<0.5] = 0
 
+                
                 pred = np.append(pred, pte, axis=0)
                 gt = np.append(gt, ate, axis=0)
                 pte[pte>=args.th] = 1 # adjustable threshold
@@ -135,7 +136,7 @@ if __name__ == '__main__':
 
     argparser.add_argument('--dim', type=int, help='attention embedding dimension for patch selection', default=96)
     argparser.add_argument('--tokensz', type=int, help='token size for image embedding', default=8)
-    argparser.add_argument('--th', type=float, help='threshold for attention or not', default=0.01)
+    argparser.add_argument('--th', type=float, help='threshold for attention or not', default=0.5)
     argparser.add_argument('--dev', type=str, help='cuda device', default='cuda:0')
     argparser.add_argument('--epoch', type=int, help='number of training epochs', default=50)
     argparser.add_argument('--lr', type=float, help='learning rate', default=0.00001)
