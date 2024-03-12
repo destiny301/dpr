@@ -8,6 +8,10 @@ Early object detection (OD) is a crucial task for the safety of many dynamic sys
 ![image](https://github.com/destiny301/dpr/blob/main/flowchart.png)
 
 ## Updates
+*03/01/2024*
+
+1. Published version: [Open Access](https://openaccess.thecvf.com/content/WACV2024/html/Zhang_Patch-Based_Selection_and_Refinement_for_Early_Object_Detection_WACV_2024_paper.html)
+
 *11/21/2023*
 
 <img src="https://github.com/destiny301/dpr/blob/main/ps_module.png" width="400">
@@ -16,10 +20,6 @@ Early object detection (OD) is a crucial task for the safety of many dynamic sys
 1. Patch-Selector module code is releaseed.
 
 2. For Patch-Refiner module, please refer to [SR3](https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement).
-
-*03/01/2024*
-
-1. Published version: [Open Access](https://openaccess.thecvf.com/content/WACV2024/html/Zhang_Patch-Based_Selection_and_Refinement_for_Early_Object_Detection_WACV_2024_paper.html)
 
 ## Data
 Prepare the data as the following structure:
