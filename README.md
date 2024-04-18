@@ -17,7 +17,7 @@ Early object detection (OD) is a crucial task for the safety of many dynamic sys
 <img src="https://github.com/destiny301/dpr/blob/main/ps_module.png" width="400">
 <!-- ![image](https://github.com/destiny301/dpr/blob/main/ps_module.png | width=100) -->
 
-1. Patch-Selector module code is releaseed.
+1. Patch-Selector module code is released.
 
 2. For Patch-Refiner module, please refer to [SR3](https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement).
 
@@ -37,9 +37,9 @@ root/
 │  │   ├── 000002.png
 │  │   ├── ......
 ```
-For your own datasets, the selection masks (binary mask) can be generated with object detection (OD) labels or instance segmentation labels.
-For OD, you need to stack all the bounding boxes together, and set the object pixels to be 1, background pixels to be 0.
-For segmentation labels, you can simple set all non-zero values to be 1.
+For your own datasets, the selection masks (binary masks) can be generated with object detection (OD) labels or instance segmentation labels.
+For OD, you need to stack all the bounding boxes together, and set the object pixels to 1, and the background pixels to 0.
+For segmentation labels, you can simply set all non-zero values to 1.
 
 2. Split the input images into patches, and select the object-containing patches with this repo.
 
