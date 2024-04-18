@@ -11,6 +11,8 @@ from torch import optim
 
 from dataset.dsloader import Data
 from model.patch_attention import PatchSelector
+from PIL import Image
+import cv2
 
 def adjust_learning_rate(optimizer, decay_rate=.1):
     update_lr_group = optimizer.param_groups
@@ -24,7 +26,7 @@ def main(args):
     print(args)
 
     # load data
-    print('============================loading data============================')
+    print('============================ loading data ============================')
     root = os.path.join('../datasets', args.data) # dataset path
     dataset_tr = Data(root, args, 'train')
     dataset_te = Data(root, args, 'val')
@@ -44,7 +46,7 @@ def main(args):
     criterion = nn.BCEWithLogitsLoss() if args.loss == 'bce' else nn.CrossEntropyLoss(torch.Tensor([1, args.beta]).to(device=device)) # weighted cross entropy
 
     # train and validate
-    print('============================Training============================')
+    print('============================ Model Training ============================')
     train_loss, test_loss = 0.0, 0.0
     tn, fp, fn, tp = 0.0, 0.0, 0.0, 0.0
     cm = np.zeros((2, 2))
@@ -125,6 +127,52 @@ def main(args):
         train_loss = 0.0
         test_loss = 0.0
 
+    if args.patch_selection_and_save:
+        # after training, patch selection and save selected patches
+        print('============================ Patch Selection ============================')
+
+        imgroot = os.path.join(root, 'images')
+        selected_patchroot = os.path.join(root, 'selected_patches')
+        if not os.path.exists(selected_patchroot):
+            os.mkdir(selected_patchroot)
+        if args.nonselection_save:
+            nonselected_patchroot = os.path.join(root, 'nonselected_patches')
+            if not os.path.exists(nonselected_patchroot):
+                os.mkdir(nonselected_patchroot)
+
+        id = np.arange(args.num_patch*args.num_patch)
+        for dir in os.listdir(imgroot):
+            for img in os.listdir(os.path.join(imgroot, dir)):
+                name = img.split('.')[0]
+                x = Image.open(os.path.join(imgroot, img))
+                x = np.asarray(x)
+                x = cv2.resize(x, [args.imgsz, args.imgsz], interpolation=cv2.INTER_LINEAR).astype(np.float32)
+                x = torch.from_numpy(x)
+                x = x.unsqueeze(0).permute(0, 3, 1, 2)
+
+                pte, p64te, p32te = model(x)
+
+                p64te = nn.MaxPool2d(kernel_size=2, stride=2)(p64te)
+                p32te = nn.MaxPool2d(kernel_size=4, stride=4)(p32te)
+                pte = torch.maximum(pte, p64te)
+                pte = torch.maximum(pte, p32te)
+                pte = nn.Sigmoid()(pte)
+                pte[pte>=args.th] = 1 # adjustable threshold
+                pte[pte<args.th] = 0
+                pte = pte.flatten()
+
+                selected_ids = id[pte == 1]
+                x = x.permute(0, 2, 3, 1).squeeze(0)
+                for i in range(args.num_patch*args.num_patch):
+                    if i in selected_ids:
+                        patch = x[i//args.num_patch*(args.imgsz//args.num_patch):(i//args.num_patch+1)*(args.imgsz//args.num_patch), i%args.num_patch*(args.imgsz//args.num_patch):(i%args.num_patch+1)*(args.imgsz//args.num_patch), :]
+                        patch = Image.fromarray(patch.numpy().astype(np.uint8))
+                        patch.save(os.path.join(selected_patchroot, name+'_'+str(i)+'.jpg'))
+                    elif args.nonselection_save:
+                        patch = x[i//args.num_patch*(args.imgsz//args.num_patch):(i//args.num_patch+1)*(args.imgsz//args.num_patch), i%args.num_patch*(args.imgsz//args.num_patch):(i%args.num_patch+1)*(args.imgsz//args.num_patch), :]
+                        patch = Image.fromarray(patch.numpy().astype(np.uint8))
+                        patch.save(os.path.join(nonselected_patchroot, name+'_'+str(i)+'.jpg'))
+                print('select patches for image:', name)
 
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
@@ -141,8 +189,11 @@ if __name__ == '__main__':
     argparser.add_argument('--epoch', type=int, help='number of training epochs', default=50)
     argparser.add_argument('--lr', type=float, help='learning rate', default=0.00001)
     argparser.add_argument('--batchsz', type=int, help='batch size', default=32)
-
     argparser.add_argument('--loss', type=str, help='loss function(bce/ce)', default='bce')
     argparser.add_argument('--beta', type=float, help='weighted cross entropy parameter', default=1)
+
+    # patch selection
+    argparser.add_argument('--patch_selection_and_save', action='store_true', help='patch selection or not')
+    argparser.add_argument('--nonselection_save', action='store_true', help='save non-selected patches or not')
     args = argparser.parse_args()
     main(args)
