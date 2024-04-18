@@ -43,7 +43,7 @@ For segmentation labels, you can simply set all non-zero values to 1.
 
 2. Split the input images into patches, and select the object-containing patches with this repo. Note, you can adjust the threshold (i.e. args.th) to get a higher TPR, which make sure less information loss.
 
-3. Leverage the diffusion models [SR3](https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement) to scale selected patches up. For your own datasets, you need to download the pretrained model and finetune it as the repo illustrats.
+3. Leverage the diffusion models [SR3](https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement) to scale selected patches up. For your own datasets, you need to download the pretrained model and finetune it as the repo illustrates.
 
 4. For the downstream tasks (eg. OD), you can directly input the upscaled patches, or simply interpolate non-selected patches with bilinear interpolation and group all patches together as the original images, then input the re-grouped images.
 Note, you also need to adjust the labels for the downstream tasks to match the input patches or re-grouped images.
