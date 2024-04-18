@@ -21,8 +21,8 @@ Early object detection (OD) is a crucial task for the safety of many dynamic sys
 
 2. For Patch-Refiner module, please refer to [SR3](https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement).
 
-## Data
-Prepare the data as the following structure:
+## Simple Start
+1. Prepare the data as the following structure:
 ```shell
 root/
 ├──images/
@@ -37,6 +37,15 @@ root/
 │  │   ├── 000002.png
 │  │   ├── ......
 ```
+For your own datasets, the selection masks (binary mask) can be generated with object detection (OD) labels or instance segmentation labels.
+For OD, you need to stack all the bounding boxes together, and set the object pixels to be 1, background pixels to be 0.
+For segmentation labels, you can simple set all non-zero values to be 1.
+
+2. Split the input images into patches, and select the object-containing patches with this repo.
+
+3. Leverage the diffusion models [SR3](https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement) to scale selected patches up.
+
+4. For the downstream tasks (eg. OD), you can directly input the upscaled patches, or simply interpolate non-selected patches with bilinear interpolation and group all patches together as the original images, then input the re-grouped images.
 
 ## Citation
 If you use DPR in your research or wish to refer to the results published here, please use the following BibTeX entry. Sincerely appreciate it!
