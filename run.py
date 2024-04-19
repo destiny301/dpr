@@ -144,7 +144,7 @@ def main(args):
         for dir in os.listdir(imgroot):
             for img in os.listdir(os.path.join(imgroot, dir)):
                 name = img.split('.')[0]
-                x = Image.open(os.path.join(imgroot, img))
+                x = Image.open(os.path.join(imgroot, dir, img))
                 x = np.asarray(x)
                 x = cv2.resize(x, [args.imgsz, args.imgsz], interpolation=cv2.INTER_LINEAR).astype(np.float32)
                 x = torch.from_numpy(x)
